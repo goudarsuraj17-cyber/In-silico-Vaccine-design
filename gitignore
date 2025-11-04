@@ -1,0 +1,104 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Large data files
+*.gz
+*.tar
+*.zip
+*.xtc
+*.trr
+*.edr
+*.tpr
+data/md_trajectories/*.xtc
+data/md_trajectories/*.trr
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.cache
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Documentation builds
+docs/_build/
+docs/.doctrees/
+
+# Test coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Backup files
+*.orig
+*.rej
+*~
+
+# Virtual environments
+.venv/
+venv/
+virtualenv/
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so

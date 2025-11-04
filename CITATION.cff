@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Kaverappa M"
+    given-names: "Inchal"
+    affiliation: "Garden City University"
+title: "In Silico Multi-Epitope Vaccine Design Against Cryptococcus neoformans"
+version: 1.0.0
+date-released: 2025-11-04
+url: "https://github.com/yourusername/cryptococcus-vaccine-design"
+preferred-citation:
+  type: thesis
+  authors:
+    - family-names: "Kaverappa M"
+      given-names: "Inchal"
+  title: "In Silico Multi-Epitope Vaccine Design Targeting Key Immunogenic Properties of Cryptococcus neoformans for the Prevention of Cryptococcal Meningitis"
+  year: 2025
+  thesis-type: "MSc Bioinformatics Minor Project"
+  institution:
+    name: "Garden City University"
+    city: "Bengaluru"
+    country: "IN"
+  department: "Department of Life Sciences"
+  supervisors:
+    - family-names: "Chemmugil"
+      given-names: ""
+      prefix: "Dr."
+keywords:
+  - bioinformatics
+  - vaccine design
+  - immunoinformatics
+  - Cryptococcus neoformans
+  - multi-epitope vaccine
+  - reverse vaccinology
+  - molecular dynamics
+  - structural bioinformatics
+license: MIT
