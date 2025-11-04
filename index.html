@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design of a Multi-Epitope Vaccine Against Chikungunya Virus: An In Silico Approach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0A386B;
+            --secondary-color: #818FA6;
+            --accent-color: #1A6CB5;
+            --background-color: #F8F9FA;
+            --text-color: #333333;
+            --light-gray: #E9ECEF;
+            --medium-gray: #CED4DA;
+            --dark-gray: #6C757D;
+        }
+        
+        body {
+            font-family: 'Source Serif Pro', Georgia, serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', Georgia, serif;
+            color: var(--primary-color);
+        }
+        
+        .journal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .journal-header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 30px;
+        }
+        
+        .journal-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .authors {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            margin-bottom: 20px;
+        }
+        
+        .affiliation {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .doi {
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+            margin-top: 20px;
+        }
+        
+        .two-column {
+            column-count: 2;
+            column-gap: 40px;
+            text-align: justify;
+        }
+        
+        .full-width {
+            column-span: all;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin: 30px 0 15px;
+            column-span: all;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 8px;
+        }
+        
+        .subsection-title {
+            font-size: 1.25rem;
+            margin: 24px 0 12px;
+            font-weight: 600;
+        }
+        
+        .figure {
+            margin: 30px 0;
+            break-inside: avoid;
+        }
+        
+        .figure-caption {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-top: 10px;
+            text-align: left;
+        }
+        
+        .table-container {
+            margin: 20px 0;
+            overflow-x: auto;
+            break-inside: avoid;
+        }
+        
+        .journal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .journal-table th {
+            background-color: var(--light-gray);
+            text-align: left;
+            padding: 12px;
+            font-weight: 600;
+        }
+        
+        .journal-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .references {
+            padding-left: 25px;
+            text-indent: -25px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .reference-item {
+            margin-bottom: 15px;
+        }
+
+        /* Retain some useful styles from original site */
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .nav-link.active, .nav-link:hover {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+        
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 100%;
+            max-width: 800px;
+            max-height: 450px;
+        }
+        
+        .component-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .component-btn {
+            transition: all 0.2s ease-in-out;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        
+        .md-sim-image, .immune-sim-image {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .md-sim-image:hover, .immune-sim-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .md-sim-caption, .immune-sim-caption {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Citation styles */
+        .citation {
+            font-size: 0.9em;
+            vertical-align: super;
+            color: var(--accent-color);
+        }
+        
+        /* Figure and table numbering */
+        .figure-number {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .table-number {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Academic Journal Header -->
+    <div class="journal-container">
+        <header class="journal-header">
+            <div class="text-sm uppercase tracking-wide text-gray-500 mb-3"></div>
+            <h1 class="journal-title">Design of a Multi-Epitope Vaccine Against Chikungunya Virus: An In Silico Approach</h1>            <div class="authors">Authors: Abhishek S R<sup>1</sup>, Janani S P<sup>2</sup></div>
+            <div class="affiliation"><sup></sup>Department of Lifescience and Bioinformatics, Garden City University, Bangalore, India</div>
+           
+        </header>
+    
+        <!-- Navigation -->
+        <nav class="sticky top-0 z-50 bg-white shadow-md py-4 px-6 mb-8">
+            <div class="flex justify-between items-center">
+                <div class="text-sm font-medium text-gray-500"></div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#abstract" class="nav-link font-medium text-gray-600 pb-1">Abstract</a>
+                    <a href="#introduction" class="nav-link font-medium text-gray-600 pb-1">Introduction</a>
+                    <a href="#materials-methods" class="nav-link font-medium text-gray-600 pb-1">Materials & Methods</a>
+                    <a href="#results" class="nav-link font-medium text-gray-600 pb-1">Results</a>
+                    <a href="#discussion" class="nav-link font-medium text-gray-600 pb-1">Discussion</a>
+                    <a href="#conclusion" class="nav-link font-medium text-gray-600 pb-1">Conclusion</a>
+                    <a href="#references" class="nav-link font-medium text-gray-600 pb-1">References</a>
+                </div>
+                <div class="md:hidden">
+                    <label for="mobile-nav" class="sr-only">Navigate to section</label>
+                    <select id="mobile-nav" aria-label="Navigation" title="Navigate to section" class="bg-gray-100 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="#abstract">Abstract</option>
+                        <option value="#introduction">Introduction</option>
+                        <option value="#materials-methods">Materials & Methods</option>
+                        <option value="#results">Results</option>
+                        <option value="#discussion">Discussion</option>
+                        <option value="#conclusion">Conclusion</option>
+                        <option value="#references">References</option>
+                    </select>
+                </div>
+            </div>
+        </nav>    <main class="journal-container">
+        <!-- Abstract -->
+        <section id="abstract" class="mb-12">
+Cryptococcus neoformans is a life-threatening fungal pathogen responsible for cryptococcal meningitis, especially in immunocompromised individuals. Existing antifungal treatments are limited by toxicity, cost, and resistance. This study aimed to design a multi-epitope vaccine using reverse vaccinology and immunoinformatics. Four conserved proteins (Mp88, Hsp70, Cda2, and a GPI-anchored cell wall protein) were selected. Epitope prediction and screening ensured the selection of non-toxic, non-allergenic, and highly antigenic candidates. A final vaccine construct was designed, modeled, and evaluated for immunogenic potential, structural stability, and expression feasibility. Results indicate strong potential for further experimental validation.
+</section>
+        
+        <!-- Introduction -->
+        <section id="introduction" class="mb-12">
+Cryptococcal meningitis claims over 180,000 lives annually, primarily in HIV/AIDS patients. Despite medical advancements, treatment remains reactive, not preventive. The absence of a licensed vaccine underscores the need for novel strategies. Reverse vaccinology, leveraging genome data and computational tools, enables the rational design of vaccines without laboratory culturing.<br>This study explored a multi-epitope vaccine approach—an emerging field that combines epitope selection, immunogenicity profiling, and structural validation to create a safe, stable, and immunologically effective vaccine candidate.
+</section>        <!-- Materials and Methods -->
+        <section id="materials-methods" class="mb-12">
+
+</section>        <!-- Results -->        <section id="results" class="mb-12">
+
+</section>        <!-- Discussion -->
+        <section id="discussion" class="mb-12">
+Cryptococcal meningitis, primarily caused by Cryptococcus neoformans, remains a critical opportunistic fungal infection, particularly among immunocompromised populations. The limitations of current antifungal therapies, including drug resistance, treatment toxicity, and lack of long-term efficacy, underscore the urgent need for preventive strategies. Vaccine development, especially through computational approaches, provides a time-efficient and cost-effective solution to this challenge.<br>In this study, a multi-epitope subunit vaccine candidate was designed using a comprehensive immunoinformatics pipeline. Four immunodominant proteins of C. neoformans (Mp88, Hsp70, Chitin Deacetylase, and GPI-anchored cell wall protein) were selected based on literature support and antigenic relevance. Epitope prediction for B-cells, CTLs, and HTLs was performed using IEDB, NetMHCpan, and BepiPred, respectively. The epitopes were further screened for immunogenicity, allergenicity, toxicity, and IFN-γ induction capability.<br>A total of 6 CTL, 7 HTL, and 4 B-cell epitopes were shortlisted and assembled into a 687-amino acid construct using appropriate linkers (AAY, GPGPG, KK) and an immunostimulatory β-defensin adjuvant. PADRE was included to overcome HLA-DR limitations. The construct was analysed for physicochemical properties, which indicated that it is stable, soluble, hydrophilic, and suitable for bacterial expression.<br>3D structure modelling with AlphaFold, refinement with GalaxyRefine, and validation through PROCHECK, ERRAT, and ProSA confirmed good stereochemical quality, minimal structural errors, and a favourable folding pattern. Molecular docking with TLR4 using HADDOCK yielded a strong binding affinity, supported by favourable electrostatic and van der Waals energy scores, as well as a robust buried surface area. PDBsum confirmed key residue interactions.<br>MD simulations with GROMACS validated the dynamic stability of the MEV-TLR4 complex. RMSD, RMSF, radius of gyration, and SASA analyses showed that the complex remains stable, compact, and appropriately flexible. Codon optimization using JCAT provided a CAI value of 1.0 and 51.67% GC content, confirming expression efficiency in E. coli. In silico cloning into the pET28a (+) vector completed the construct design.<br>Overall, this study successfully demonstrated a computational pipeline for designing a safe, stable, and immunogenic vaccine construct against cryptococcal meningitis.
+</section>
+        
+        <!-- Conclusion -->
+        <section id="conclusion" class="mb-12">
+This project highlights the effective application of immunoinformatics in designing a safe and immunogenic multi-epitope vaccine candidate against Cryptococcus neoformans. The construct integrates epitopes capable of stimulating both cellular and humoral immunity, supported by favourable docking and simulation results.<br>The designed construct not only satisfies all key physicochemical and immunological parameters but also demonstrates robust receptor binding and stability under dynamic conditions. The inclusion of a β-defensin adjuvant, PADRE sequence, and epitope linkers improves immune accessibility and presentation. Structural validations confirm that the model is suitable for downstream experimental and clinical testing.<br>Furthermore, codon optimization and in silico cloning show that the construct is well-suited for bacterial expression systems such as E. coli, enhancing its viability for production and testing.<br>Overall, this study delivers a computationally validated vaccine prototype with the potential to significantly advance the field of antifungal vaccine development. While in silico findings are highly promising, further in vitro and in vivo validation is essential to determine its protective efficacy and safety profile in real-world biological systems.
+</section>
+        
+        <!-- References -->
+        <section id="references" class="mb-12">
+Abraham, M. J., Murtola, T., Schulz, R., et al. (2015). GROMACS: High performance molecular simulations through multi-level parallelism from laptops to supercomputers. SoftwareX, 1–2, 19–25. https://doi.org/10.1016/j.softx.2015.06.001<br>Bhasin, M., & Raghava, G. P. S. (2004). Prediction of toxic regions in proteins and peptides. Bioinformatics, 20(17), 2633–2639. https://doi.org/10.1093/bioinformatics/bth190<br>Colovos, C., & Yeates, T. O. (1993). ERRAT: A program to verify protein structures. Protein Science, 2(9), 1511–1519. https://doi.org/10.1002/pro.5560020916<br>De Beer, T. A. P., Berka, K., Thornton, J. M., & Laskowski, R. A. (2014). PDBsum additions. Nucleic Acids Research, 42(D1), D283–D288. https://doi.org/10.1093/nar/gkt490<br>Dimitrov, I., Bangov, I., Flower, D. R., & Doytchinova, I. (2014). AllerTOP v.2—a server for in silico prediction of allergens. Journal of Molecular Modeling, 20(6), 2278. https://doi.org/10.1007/s00894-014-2278-5<br>Doytchinova, I. A., & Flower, D. R. (2007). VaxiJen: A server for prediction of protective antigens, tumor antigens and subunit vaccines. BMC Bioinformatics, 8, 4. https://doi.org/10.1186/1471-2105-8-4<br>Grote, A., Hiller, K., Scheer, M., et al. (2005). JCat: A novel tool to adapt codon usage of a target gene to its potential expression host. Nucleic Acids Research, 33(Web Server Issue), W526–W531. https://doi.org/10.1093/nar/gki376<br>Heo, L., Park, H., & Seok, C. (2013). GalaxyRefine: Protein structure refinement driven by side-chain repacking. Nucleic Acids Research, 41(W1), W384–W388. https://doi.org/10.1093/nar/gkt458<br>Jumper, J., Evans, R., Pritzel, A., et al. (2021). Highly accurate protein structure prediction with AlphaFold. Nature, 596(7873), 583–589. https://doi.org/10.1038/s41586-021-03819-2<br>Khan, M. T., Zeb, A., Khan, A., et al. (2023). A comprehensive immunoinformatic analysis of chitin deacetylases and MP88 for designing multi-epitope vaccines against Cryptococcus neoformans. Journal of Biomolecular Structure and Dynamics, 42(20), 10711–10726. https://doi.org/10.1080/07391102.2023.2258410<br>Laskowski, R. A., MacArthur, M. W., Moss, D. S., & Thornton, J. M. (1993). PROCHECK: A program to check the stereochemical quality of protein structures. Journal of Applied Crystallography, 26(2), 283–291. https://doi.org/10.1107/S0021889892009944<br>Omer, S., Iqbal, S., Khan, S., et al. (2024). Design of an epitope-based peptide vaccine against Cryptococcus neoformans. FEBS Open Bio, 14(9), 1471–1489. https://doi.org/10.1002/2211-5463.13858<br>Park, B. J., Wannemuehler, K. A., Marston, B. J., et al. (2009). Estimation of the current global burden of cryptococcal meningitis among persons living with HIV/AIDS. PLoS Medicine, 6(9), e1000390. https://doi.org/10.1371/journal.pmed.1000390<br>Perfect, J. R. (2017). The antifungal pipeline: A reality check. Clinical Microbiology Reviews, 30(1), 1–19. https://doi.org/10.1128/CMR.00003-17<br>Rajasingham, R., Smith, R. M., Park, B. J., et al. (2017). Global burden of disease of HIV-associated cryptococcal meningitis: An updated analysis. The Lancet Infectious Diseases, 17(8), 873–881. https://doi.org/10.1016/S1473-3099(17)30243-8<br>Savojardo, C., Martelli, P. L., Fariselli, P., & Casadio, R. (2018). SoluProt: Prediction of soluble protein expression in Escherichia coli. Bioinformatics, 34(20), 3584–3590. https://doi.org/10.1093/bioinformatics/bty401<br>Specht, C. A., Lee, C. K., Huang, H., et al. (2022). Protection of mice against experimental cryptococcosis by peptides delivered in glucan particles containing recombinant antigens. mBio, 13(6), e03367-21. https://doi.org/10.1128/mBio.03367-21<br>Upadhya, R., Lam, W. C., Maybruck, B. T., Donlin, M. J., Chang, A. L., & Lodge, J. K. (2016). Cryptococcus neoformans Cda1 and Cda2 are required for chitosan production and virulence. Eukaryotic Cell, 15(2), 217–226. https://doi.org/10.1128/EC.00274-15<br>Van Zundert, G. C. P., Rodrigues, J. P. G. L. M., Trellet, M., et al. (2016). The HADDOCK2.2 Web Server: User-friendly integrative modeling of biomolecular complexes. Journal of Molecular Biology, 428(4), 720–725. https://doi.org/10.1016/j.jmb.2015.09.014<br>Vita, R., Mahajan, S., Overton, J. A., et al. (2019). The Immune Epitope Database (IEDB): 2018 update. Nucleic Acids Research, 47(D1), D339–D343. https://doi.org/10.1093/nar/gky1006<br>Wang, Y., Specht, C. A., Levitz, S. M., et al. (2023). Immunological correlates of protection following vaccination with glucan particles containing Cryptococcus neoformans chitin deacetylases. npj Vaccines, 8, 6. https://doi.org/10.1038/s41541-023-00606-0<br>Wiederstein, M., & Sippl, M. J. (2007). ProSA-web: Web service for the recognition of errors in three-dimensional structures of proteins. Nucleic Acids Research, 35(Web Server Issue), W407–W410. https://doi.org/10.1093/nar/gkm290
+</section>
+    </main>
+    
+    <script>
+    document.getElementById('show-all-immune-btn').addEventListener('click', function() {
+        const additionalImages = document.getElementById('additional-immune-images');
+        if (additionalImages.classList.contains('hidden')) {
+            additionalImages.classList.remove('hidden');
+            this.textContent = 'Hide Additional Images -';
+        } else {
+            additionalImages.classList.add('hidden');
+            this.textContent = 'Show All Immune Response Images +';
+        }
+    });
+    // --- Data ---
+    const vaccineData = {
+        adjuvant: {
+            title: 'Adjuvant: Beta Defensin 3',
+            description: 'An adjuvant is included to boost the immune response. We used Beta Defensin 3, a potent immunomodulator that activates the innate immune system, setting the stage for a stronger, more durable adaptive immune response.',
+            sequence: 'GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKK',
+            linkers: [{ name: 'EAAAK', purpose: 'Rigid linker to separate from PADRE sequence.' }]
+        },
+        padre: {
+            title: 'PADRE Sequence',
+            description: 'The Pan-DR-binding epitope (PADRE) is a universal T-helper epitope. It is designed to bind to a wide variety of MHC Class II molecules, ensuring that the vaccine can activate helper T-cells in a broad human population, overcoming genetic diversity in HLA types.',
+            sequence: 'AKFVAAWTLKAAA',
+        },
+        mhc1: {
+            title: 'MHC Class I Epitopes',
+            description: 'These six short peptides are predicted to bind to MHC Class I molecules. This is crucial for activating CD8+ cytotoxic T-lymphocytes (CTLs), which are responsible for identifying and destroying virus-infected cells. Linker: AAY.',
+            epitopes: [
+                { peptide: 'ASAKLRVLY', alleles: 'HLA-A*30:02, HLA-B*57:01, ...', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'ALASAEFRV', alleles: 'HLA-A*02:01, HLA-A*02:03, ...', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'YYYELYPTM', alleles: 'HLA-A*23:01, HLA-A*24:02', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'SPMVLEMEL', alleles: 'HLA-B*07:02, HLA-B*35:01', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'FTIPTGAGK', alleles: 'HLA-A*68:01, HLA-A*11:01', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'GTMGHFILAR', alleles: 'HLA-A*31:01, HLA-A*11:01, ...', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+            ]
+        },
+        mhc2: {
+            title: 'MHC Class II Epitopes',
+            description: 'These four longer peptides are designed to be presented by MHC Class II molecules. This activates CD4+ helper T-cells, which are the "master regulators" of the adaptive immune response, helping to coordinate both B-cell antibody production and CTL activity. Linker: GPGPG.',
+            epitopes: [
+                { peptide: 'RPGYYQLLQASLTCS', alleles: 'HLA-DRB1*01:01', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'DVYNMDYPPFGAGRP', alleles: 'HLA-DRB1*04:01', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'VSAYEHVTVIPNTVG', alleles: 'HLA-DRB1*04:05', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+                { peptide: 'YQEEWVTHKKEVVLT', alleles: 'HLA-DRB1*13:02', properties: 'Non-toxic, Non-allergenic, Antigenic, Immunogenic' },
+            ]
+        },
+        bcell: {
+            title: 'Linear B-Cell Epitopes',
+            description: 'These two epitopes are predicted to be recognized directly by B-cells, stimulating them to produce antibodies. These antibodies can then neutralize free-floating virus particles, preventing them from infecting new cells. Linker: KK.',
+            epitopes: [
+                { peptide: 'IGTDDSHDWTKLRYMDNHIPADAGR', properties: 'Non-toxic, Non-allergenic, Antigenic' },
+                { peptide: 'DVYNMDYPPFGAGRPGQFGDIQSRTPESKDVYAN', properties: 'Non-toxic, Non-allergenic, Antigenic' },
+            ]
+        },
+        sequence: {
+            title: 'Full Vaccine Construct Amino Acid Sequence',
+            description: 'The final 291-amino acid sequence assembled from all components. The sequence is terminated with a GGGSHHHHHH tag for purification.',
+            sequence: 'GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKEAAAKAKFVAAWTLKAAAGGGSASAKLRVLYAAYALASAEFRVAAYYYYELYPTMAAYSPMVLEMELAAYFTIPTGAGKAAYGTMGHFILARGGGSRPGYYQLLQASLTCSGPGPGDVYNMDYPPFGAGRPGPGPGVSAYEHVTVIPNTVGGPGPGYQEEWVTHKKEVVLTGGGSIGTDDSHDWTKLRYMDNHIPADAGRKKDVYNMDYPPFGAGRPGQFGDIQSRTPESKDVYANGGGSHHHHHH'
+        }
+    };
+
+    const dockingData = {
+        labels: ['TLR4', 'MHC1', 'MHC2'],
+        datasets: [{
+            label: 'HADDOCK Score',
+            data: [-42.2, -55.3, -91.9],
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Z-Score',
+            data: [-2.1, -2.2, -1.8],
+            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1
+        }]
+    };
+      // Removed immuneSimData as we now use static images instead
+
+
+    // --- Functions ---
+    async function callLLM(prompt, outputElement, loadingElement) {
+        outputElement.classList.add('hidden');
+        loadingElement.classList.remove('hidden');
+        try {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "" 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                outputElement.innerHTML = `<p class="font-semibold mb-2">Result:</p><div>${text}</div>`;
+            } else {
+                outputElement.innerHTML = `<p class="font-semibold mb-2 text-red-600">Error: Could not generate response.</p>`;
+            }
+        } catch (error) {
+            console.error('LLM API call failed:', error);
+            outputElement.innerHTML = `<p class="font-semibold mb-2 text-red-600">Error: API call failed. Check console for details.</p>`;
+        } finally {
+            loadingElement.classList.add('hidden');
+            outputElement.classList.remove('hidden');
+        }
+    }    function renderComponentDetails(componentKey) {
+        const data = vaccineData[componentKey];
+        const container = document.getElementById('component-details');
+        if (!data) {
+            container.innerHTML = '<p>Select a component to see details.</p>';
+            return;
+        }
+
+        let content = `<div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 fade-in">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">${data.title}</h3>
+                        <p class="text-gray-600 mb-6">${data.description}</p>`;        if (data.sequence) {
+            content += `<h4 class="font-semibold text-lg mb-2">Sequence:</h4>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm text-gray-700 whitespace-pre-wrap break-all mb-4"><code>${data.sequence}</code></pre>`;
+        }
+        
+        if (data.epitopes) {
+            content += `<div class="overflow-x-auto"><table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Peptide</th>`;
+            if (data.epitopes[0].alleles) content += `<th scope="col" class="px-6 py-3">Predicted HLA Alleles</th>`;
+            content += `<th scope="col" class="px-6 py-3">Predicted Properties</th>
+                    </tr>
+                </thead><tbody>`;
+
+            data.epitopes.forEach(epitope => {
+                content += `<tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-6 py-4 font-mono">${epitope.peptide}</td>`;
+                if (epitope.alleles) content += `<td class="px-6 py-4">${epitope.alleles}</td>`;
+                content += `<td class="px-6 py-4">${epitope.properties}</td>
+                            </tr>`;
+            });
+            content += `</tbody></table></div>`;
+        }
+        
+        content += '</div>';
+        container.innerHTML = content;
+    }
+
+    function createDockingChart() {
+        const ctx = document.getElementById('dockingChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: dockingData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: '#e5e7eb' }
+                    }
+                },
+            }
+        });
+    }    // Removed createImmuneSimChart function as we now use static images instead    // --- Event Listeners ---
+    document.getElementById('vaccine-diagram').addEventListener('click', function (e) {
+        if (e.target.tagName === 'BUTTON') {
+            const componentKey = e.target.getAttribute('data-component');
+            
+            document.querySelectorAll('.component-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+
+            renderComponentDetails(componentKey);
+        }
+    });
+
+    const copyDnaBtn = document.getElementById('copy-dna-btn');
+    const copyDnaTooltip = document.getElementById('copy-dna-tooltip');
+    copyDnaBtn.addEventListener('click', function () {
+        const dnaSequence = document.getElementById('dna-sequence').innerText;
+        const textarea = document.createElement('textarea');
+        textarea.value = dnaSequence;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        copyDnaTooltip.style.opacity = '1';
+        setTimeout(() => {
+            copyDnaTooltip.style.opacity = '0';
+        }, 2000);
+    });
+
+    // Mobile navigation
+    document.getElementById('mobile-nav').addEventListener('change', function(e) {
+        window.location.hash = e.target.value;
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                });
+            }
+        });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    sections.forEach(section => observer.observe(section));
+
+    // --- LLM Feature Listeners ---
+    document.querySelectorAll('.llm-summarize-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+            const targetSectionId = this.dataset.targetSection;
+            const sectionContent = document.getElementById(targetSectionId).querySelector('p:not(.text-sm)').innerText; // Get main paragraph content
+            const outputDiv = this.nextElementSibling.querySelector('.summary-content');
+            const loadingDiv = this.nextElementSibling.querySelector('.loading-indicator');
+            this.nextElementSibling.classList.remove('hidden'); // Show the summary output area
+
+            const prompt = `Summarize the following scientific text concisely: "${sectionContent}"`;
+            await callLLM(prompt, outputDiv, loadingDiv);
+        });
+    });
+
+    document.getElementById('explain-concept-btn').addEventListener('click', async function() {
+        const conceptInput = document.getElementById('concept-input');
+        const concept = conceptInput.value.trim();
+        const outputDiv = document.getElementById('concept-output').querySelector('.explanation-content');
+        const loadingDiv = document.getElementById('concept-output').querySelector('.loading-indicator');
+        document.getElementById('concept-output').classList.remove('hidden'); // Show the explanation output area
+
+        if (concept) {
+            const prompt = `Explain the scientific concept "${concept}" in simple terms, suitable for a general audience.`;
+            await callLLM(prompt, outputDiv, loadingDiv);
+        } else {
+            outputDiv.innerHTML = `<p class="font-semibold mb-2 text-red-600">Please enter a concept to explain.</p>`;
+            loadingDiv.classList.add('hidden');
+            document.getElementById('concept-output').classList.remove('hidden');
+        }
+    });
+    // --- Initial Render ---
+    createDockingChart();
+    // No longer need createImmuneSimChart() as we're using images instead
+    document.querySelector('.component-btn[data-component="adjuvant"]').classList.add('active');
+    renderComponentDetails('adjuvant');
+    
+    // --- MD Simulation Image Modal ---    // Add modal HTML
+    const modalHTML = `
+        <div id="md-sim-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 hidden">
+            <div class="max-w-4xl w-full bg-white rounded-lg overflow-hidden shadow-xl relative">
+                <button id="md-sim-modal-close" class="absolute top-2 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">&times;</button>
+                <button id="md-sim-modal-prev" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-80 rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-all z-10">&lt;</button>
+                <button id="md-sim-modal-next" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-80 rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-all z-10">&gt;</button>
+                <div class="p-4">
+                    <h3 id="md-sim-modal-title" class="text-xl font-bold text-center mb-2"></h3>
+                    <img id="md-sim-modal-img" src="" alt="MD simulation image" class="w-full h-auto">
+                    <div id="md-sim-modal-description" class="text-gray-700 text-center mt-5 mb-2 max-w-3xl mx-auto"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Set up modal event listeners
+    const modal = document.getElementById('md-sim-modal');
+    const modalClose = document.getElementById('md-sim-modal-close');
+    const modalImg = document.getElementById('md-sim-modal-img');
+    const modalTitle = document.getElementById('md-sim-modal-title');
+    const modalDescription = document.getElementById('md-sim-modal-description');    // Add click event to all simulation images (MD and immune)
+    document.querySelectorAll('.md-sim-image, .immune-sim-image').forEach(img => {
+        img.addEventListener('click', function() {
+            modalImg.src = this.src;
+            modalTitle.textContent = this.alt;
+            
+            // Set detailed descriptions based on image alt text
+            if (this.alt.includes("Radius of gyration")) {
+                modalDescription.innerHTML = `<strong>Radius of gyration (Rg):</strong> This plot shows the compactness of the vaccine construct over the 100 ns simulation. 
+                The stability between 3.3-3.6 nm indicates that the protein maintains consistent size and shape without unfolding or collapsing.
+                Minor fluctuations are normal for a dynamic protein in solution.`;
+            } else if (this.alt.includes("RMSD")) {
+                modalDescription.innerHTML = `<strong>Root Mean Square Deviation (RMSD):</strong> This measures the average distance between atoms of superimposed protein structures.
+                The plateau reached after initial equilibration (first ~20 ns) indicates the structure has reached a stable conformation.
+                This stability is crucial for maintaining epitope presentation to immune cells.`;
+            } else if (this.alt.includes("RMSF")) {
+                modalDescription.innerHTML = `<strong>Root Mean Square Fluctuation (RMSF):</strong> This identifies which parts of the protein are most flexible.
+                Lower values indicate more rigid regions, while peaks show flexible segments.
+                Epitope regions show appropriate flexibility to engage with immune receptors while maintaining their overall structure.`;
+            } else if (this.alt.includes("Hydrogen Bond")) {
+                modalDescription.innerHTML = `<strong>Hydrogen Bond Analysis:</strong> Hydrogen bonds are crucial for stabilizing protein structure.
+                This plot shows the number of hydrogen bonds present throughout the simulation.
+                The consistent hydrogen bond count indicates stable secondary structure elements (alpha helices and beta sheets) are maintained throughout the simulation.`;
+            } 
+            // Immune simulation image descriptions
+            else if (this.alt.includes("Cytokine Dynamics")) {
+                modalDescription.innerHTML = `<strong>Cytokine Profile Dynamics:</strong> This comprehensive plot shows the time-dependent changes in multiple cytokine levels following vaccination. 
+                The balanced profile of pro-inflammatory (IFN-γ, IL-12) and regulatory (IL-10, TGF-β) cytokines suggests a well-regulated immune response that effectively clears infection without excessive inflammation.`;
+            } else if (this.alt.includes("IFN-γ")) {
+                modalDescription.innerHTML = `<strong>IFN-γ (Interferon gamma):</strong> This key Th1 cytokine is essential for antiviral immunity. 
+                The strong early production followed by sustained levels indicates effective activation of cell-mediated immunity, particularly cytotoxic T-cells that can target and eliminate virus-infected cells.`;
+            } else if (this.alt.includes("IL-4")) {
+                modalDescription.innerHTML = `<strong>IL-4 (Interleukin-4):</strong> This Th2-associated cytokine helps drive antibody production. 
+                The moderate levels shown here suggest a balanced immune response that supports antibody development without suppressing the critical Th1 response needed for viral clearance.`;
+            } else if (this.alt.includes("IL-12")) {
+                modalDescription.innerHTML = `<strong>IL-12 (Interleukin-12):</strong> This cytokine is crucial for promoting Th1 differentiation and IFN-γ production. 
+                The early spike followed by moderate sustained levels indicates proper activation of cell-mediated immunity, essential for clearance of intracellular pathogens like viruses.`;
+            } else if (this.alt.includes("TGF-β")) {
+                modalDescription.innerHTML = `<strong>TGF-β (Transforming Growth Factor beta):</strong> This regulatory cytokine helps prevent excessive inflammation. 
+                The moderate levels observed help maintain immunological homeostasis while allowing effective immune activity against the pathogen.`;
+            } else if (this.alt.includes("TNF-α")) {
+                modalDescription.innerHTML = `<strong>TNF-α (Tumor Necrosis Factor alpha):</strong> This pro-inflammatory cytokine is important for local inflammation and immune cell recruitment. 
+                The controlled early increase followed by return to baseline suggests appropriate inflammatory activation without chronic inflammation that could lead to tissue damage.`;
+            } else if (this.alt.includes("IL-10")) {
+                modalDescription.innerHTML = `<strong>IL-10 (Interleukin-10):</strong> This anti-inflammatory cytokine helps regulate immune responses. 
+                Its presence helps prevent excessive inflammation while allowing effective clearance of the pathogen.`;
+            } else if (this.alt.includes("IL-6")) {
+                modalDescription.innerHTML = `<strong>IL-6 (Interleukin-6):</strong> This pleiotropic cytokine has both pro- and anti-inflammatory properties. 
+                It helps activate T-cells and promotes antibody production. The moderate levels suggest appropriate activation without cytokine storm.`;
+            } else if (this.alt.includes("IFN-β")) {
+                modalDescription.innerHTML = `<strong>IFN-β (Interferon beta):</strong> This type I interferon is critical for early antiviral responses. 
+                Its production helps limit viral spread and primes the adaptive immune response.`;
+            } else if (this.alt.includes("IL-18")) {
+                modalDescription.innerHTML = `<strong>IL-18 (Interleukin-18):</strong> Working synergistically with IL-12, IL-18 enhances IFN-γ production and supports Th1 development. 
+                Its presence contributes to an effective cell-mediated immune response against the virus.`;
+            } else if (this.alt.includes("IL-23")) {
+                modalDescription.innerHTML = `<strong>IL-23 (Interleukin-23):</strong> This cytokine supports Th17 responses which can contribute to mucosal immunity. 
+                The moderate levels suggest appropriate activation of multiple T-cell subsets for comprehensive immunity.`;
+            } else if (this.alt.includes("T-Cell Activation")) {
+                modalDescription.innerHTML = `<strong>T-Cell Activation:</strong> This graph shows the kinetics of T-cell activation following vaccination. 
+                The robust and sustained activation indicates effective priming of both CD4+ helper and CD8+ cytotoxic T-cells, essential for a comprehensive anti-viral response.`;
+            } else if (this.alt.includes("B-Cell Response")) {
+                modalDescription.innerHTML = `<strong>B-Cell Response:</strong> This plot demonstrates B-cell proliferation and activation dynamics. 
+                The strong B-cell response suggests effective activation of humoral immunity, leading to antibody production.`;
+            } else if (this.alt.includes("Antibody Production")) {
+                modalDescription.innerHTML = `<strong>Antibody Production:</strong> This graph shows the kinetics of antibody production following vaccination. 
+                The increasing titers followed by sustained plateau suggest development of durable humoral immunity that can neutralize free virus particles.`;
+            } else {
+                modalDescription.textContent = this.nextElementSibling.textContent;
+            }
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    // Close modal on button click
+    modalClose.addEventListener('click', function() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+    
+    // Close modal on outside click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    });
+      // Close modal on escape key and add arrow key navigation
+    document.addEventListener('keydown', function(e) {
+        if (modal.classList.contains('hidden')) return;
+        
+        if (e.key === 'Escape') {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        } else if (e.key === 'ArrowRight') {
+            navigateModal('next');
+        } else if (e.key === 'ArrowLeft') {
+            navigateModal('prev');
+        }
+    });
+    
+    // Navigation buttons
+    const prevButton = document.getElementById('md-sim-modal-prev');
+    const nextButton = document.getElementById('md-sim-modal-next');
+    
+    prevButton.addEventListener('click', function() {
+        navigateModal('prev');
+    });
+    
+    nextButton.addEventListener('click', function() {
+        navigateModal('next');
+    });
+      // Navigation function
+    function navigateModal(direction) {
+        // Find all simulation images
+        const allImages = Array.from(document.querySelectorAll('.md-sim-image, .immune-sim-image'));
+        const currentSrc = modalImg.src;
+        const currentIndex = allImages.findIndex(img => img.src === currentSrc);
+        
+        // Determine if we're navigating within MD images or immune images
+        const isImmuneImage = currentSrc.includes('/images/');
+        
+        // Filter images based on type to stay within the same category
+        const images = isImmuneImage 
+            ? allImages.filter(img => img.src.includes('/images/'))
+            : allImages.filter(img => img.src.includes('/MD Sim/'));
+            
+        // Find current index within the filtered category
+        const categoryIndex = images.findIndex(img => img.src === currentSrc);
+        
+        let newIndex;
+        if (direction === 'next') {
+            newIndex = (categoryIndex + 1) % images.length;
+        } else {
+            newIndex = (categoryIndex - 1 + images.length) % images.length;
+        }
+        
+        const newImage = images[newIndex];
+        modalImg.src = newImage.src;
+        modalTitle.textContent = newImage.alt;
+        
+        // Update description based on the image type - using the same logic as in the click event
+        if (newImage.alt.includes("Radius of gyration")) {
+            modalDescription.innerHTML = `<strong>Radius of gyration (Rg):</strong> This plot shows the compactness of the vaccine construct over the 100 ns simulation. 
+            The stability between 3.3-3.6 nm indicates that the protein maintains consistent size and shape without unfolding or collapsing.
+            Minor fluctuations are normal for a dynamic protein in solution.`;
+        } else if (newImage.alt.includes("RMSD")) {
+            modalDescription.innerHTML = `<strong>Root Mean Square Deviation (RMSD):</strong> This measures the average distance between atoms of superimposed protein structures.
+            The plateau reached after initial equilibration (first ~20 ns) indicates the structure has reached a stable conformation.
+            This stability is crucial for maintaining epitope presentation to immune cells.`;
+        } else if (newImage.alt.includes("RMSF")) {
+            modalDescription.innerHTML = `<strong>Root Mean Square Fluctuation (RMSF):</strong> This identifies which parts of the protein are most flexible.
+            Lower values indicate more rigid regions, while peaks show flexible segments.
+            Epitope regions show appropriate flexibility to engage with immune receptors while maintaining their overall structure.`;
+        } else if (newImage.alt.includes("Hydrogen Bond")) {
+            modalDescription.innerHTML = `<strong>Hydrogen Bond Analysis:</strong> Hydrogen bonds are crucial for stabilizing protein structure.
+            This plot shows the number of hydrogen bonds present throughout the simulation.
+            The consistent hydrogen bond count indicates stable secondary structure elements (alpha helices and beta sheets) are maintained throughout the simulation.`;
+        } 
+        // Immune simulation image descriptions
+        else if (newImage.alt.includes("Cytokine Dynamics")) {
+            modalDescription.innerHTML = `<strong>Cytokine Profile Dynamics:</strong> This comprehensive plot shows the time-dependent changes in multiple cytokine levels following vaccination. 
+            The balanced profile of pro-inflammatory (IFN-γ, IL-12) and regulatory (IL-10, TGF-β) cytokines suggests a well-regulated immune response that effectively clears infection without excessive inflammation.`;
+        } else if (newImage.alt.includes("IFN-γ")) {
+            modalDescription.innerHTML = `<strong>IFN-γ (Interferon gamma):</strong> This key Th1 cytokine is essential for antiviral immunity. 
+            The strong early production followed by sustained levels indicates effective activation of cell-mediated immunity, particularly cytotoxic T-cells that can target and eliminate virus-infected cells.`;
+        } else if (newImage.alt.includes("IL-4")) {
+            modalDescription.innerHTML = `<strong>IL-4 (Interleukin-4):</strong> This Th2-associated cytokine helps drive antibody production. 
+            The moderate levels shown here suggest a balanced immune response that supports antibody development without suppressing the critical Th1 response needed for viral clearance.`;
+        } else if (newImage.alt.includes("IL-12")) {
+            modalDescription.innerHTML = `<strong>IL-12 (Interleukin-12):</strong> This cytokine is crucial for promoting Th1 differentiation and IFN-γ production. 
+            The early spike followed by moderate sustained levels indicates proper activation of cell-mediated immunity, essential for clearance of intracellular pathogens like viruses.`;
+        } else if (newImage.alt.includes("TGF-β")) {
+            modalDescription.innerHTML = `<strong>TGF-β (Transforming Growth Factor beta):</strong> This regulatory cytokine helps prevent excessive inflammation. 
+            The moderate levels observed help maintain immunological homeostasis while allowing effective immune activity against the pathogen.`;
+        } else if (newImage.alt.includes("TNF-α")) {
+            modalDescription.innerHTML = `<strong>TNF-α (Tumor Necrosis Factor alpha):</strong> This pro-inflammatory cytokine is important for local inflammation and immune cell recruitment. 
+            The controlled early increase followed by return to baseline suggests appropriate inflammatory activation without chronic inflammation that could lead to tissue damage.`;
+        } else if (newImage.alt.includes("IL-10")) {
+            modalDescription.innerHTML = `<strong>IL-10 (Interleukin-10):</strong> This anti-inflammatory cytokine helps regulate immune responses. 
+            Its presence helps prevent excessive inflammation while allowing effective clearance of the pathogen.`;
+        } else if (newImage.alt.includes("IL-6")) {
+            modalDescription.innerHTML = `<strong>IL-6 (Interleukin-6):</strong> This pleiotropic cytokine has both pro- and anti-inflammatory properties. 
+            It helps activate T-cells and promotes antibody production. The moderate levels suggest appropriate activation without cytokine storm.`;
+        } else if (newImage.alt.includes("IFN-β")) {
+            modalDescription.innerHTML = `<strong>IFN-β (Interferon beta):</strong> This type I interferon is critical for early antiviral responses. 
+            Its production helps limit viral spread and primes the adaptive immune response.`;
+        } else if (newImage.alt.includes("IL-18")) {
+            modalDescription.innerHTML = `<strong>IL-18 (Interleukin-18):</strong> Working synergistically with IL-12, IL-18 enhances IFN-γ production and supports Th1 development. 
+            Its presence contributes to an effective cell-mediated immune response against the virus.`;
+        } else if (newImage.alt.includes("IL-23")) {
+            modalDescription.innerHTML = `<strong>IL-23 (Interleukin-23):</strong> This cytokine supports Th17 responses which can contribute to mucosal immunity. 
+            The moderate levels suggest appropriate activation of multiple T-cell subsets for comprehensive immunity.`;
+        } else if (newImage.alt.includes("T-Cell Activation")) {
+            modalDescription.innerHTML = `<strong>T-Cell Activation:</strong> This graph shows the kinetics of T-cell activation following vaccination. 
+            The robust and sustained activation indicates effective priming of both CD4+ helper and CD8+ cytotoxic T-cells, essential for a comprehensive anti-viral response.`;
+        } else if (newImage.alt.includes("B-Cell Response")) {
+            modalDescription.innerHTML = `<strong>B-Cell Response:</strong> This plot demonstrates B-cell proliferation and activation dynamics. 
+            The strong B-cell response suggests effective activation of humoral immunity, leading to antibody production.`;
+        } else if (newImage.alt.includes("Antibody Production")) {
+            modalDescription.innerHTML = `<strong>Antibody Production:</strong> This graph shows the kinetics of antibody production following vaccination. 
+            The increasing titers followed by sustained plateau suggest development of durable humoral immunity that can neutralize free virus particles.`;
+        } else {
+            modalDescription.textContent = newImage.nextElementSibling.textContent;
+        }
+    }
+});
+</script>
+</body>
+</html>
